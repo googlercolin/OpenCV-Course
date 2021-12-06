@@ -1,2 +1,0 @@
-
-cv.waitKey(0)
