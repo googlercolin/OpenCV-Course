@@ -10,8 +10,8 @@ class FaceMeshDetector():
         self.minDetectConf = minDetectConf
         self.minTrackConf = minTrackConf
 
-        self.mpDraw = mp.solutions.drawing_utils
-        self.mpFaceMesh = mp.solutions.face_mesh
+        self.mpDraw = mp.solutions.mediapipe.python.solutions.drawing_utils
+        self.mpFaceMesh = mp.solutions.mediapipe.python.solutions.face_mesh
         self.faceMesh = self.mpFaceMesh.FaceMesh(self.staticMode, self.maxFaces, self.refineLm, self.minDetectConf, self.minTrackConf)
         self.drawSpec = self.mpDraw.DrawingSpec(thickness=2, circle_radius=2)
 

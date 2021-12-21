@@ -10,9 +10,9 @@ class handDetector():
         self.detectConf = detectConf
         self.trackConf = trackConf
 
-        self.mpHands = mp.solutions.hands
+        self.mpHands = mp.solutions.mediapipe.python.solutions.hands
         self.hands = self.mpHands.Hands(self.mode, self.maxHands, self.modelComplexity, self.detectConf, self.trackConf) # hands object only uses RGB imgs
-        self.mpDraw = mp.solutions.drawing_utils
+        self.mpDraw = mp.solutions.mediapipe.python.solutions.drawing_utils
 
     def findHands(self, img, draw = True):
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
