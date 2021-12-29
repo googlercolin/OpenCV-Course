@@ -1,6 +1,7 @@
 import cv2 as cv
 import mediapipe as mp
 import time
+import math
 
 class poseDetector():
     def __init__(self, mode=False, modelComplexity=1, smoothLm=True, enableSeg=False, smooth=True, detectConf=0.5, trackConf=0.5) -> None:
@@ -35,22 +36,46 @@ class poseDetector():
         return img
     
     def findPosition(self, img, draw=True):
-        lmList = []
+        self.lmList = []
 
         if self.results.pose_landmarks == None:
-            return lmList
+            return self.lmList
 
         for id, lm in enumerate(self.results.pose_landmarks.landmark):
             h, w, c = img.shape 
             # use h, w to determine exact pixels from lm.x and lm.y
             cx, cy = int(lm.x*w), int(lm.y*h)
-            lmList.append([id, cx, cy])
+            self.lmList.append([id, cx, cy])
             if draw: 
                 cv.circle(img, (cx, cy), 10, (255, 0, 255), -1)
 
-        return lmList
+        return self.lmList
 
+    def findAngle(self, img, lm1, lm2, lm3, draw=True):
 
+        # Get the landmarks
+        x1, y1 = self.lmList[lm1][1:]
+        x2, y2 = self.lmList[lm2][1:]
+        x3, y3 = self.lmList[lm3][1:]
+
+        # Calculate the Angle
+        angle = math.degrees(math.atan2(y3-y2, x3-x2)-math.atan2(y1-y2, x1-x2))
+        if angle < 0:
+            angle += 360
+        
+        # Draw
+        if draw:
+            cv.line(img, (x1, y1), (x2, y2), (255, 255, 255), 3)
+            cv.line(img, (x3, y3), (x2, y2), (255, 255, 255), 3)
+            cv.circle(img, (x1, y1), 10, (255, 0, 255), -1)
+            cv.circle(img, (x1, y1), 15, (255, 0, 255), 2)
+            cv.circle(img, (x2, y2), 10, (255, 0, 255), -1)
+            cv.circle(img, (x2, y2), 15, (255, 0, 255), 2)
+            cv.circle(img, (x3, y3), 10, (255, 0, 255), -1)
+            cv.circle(img, (x3, y3), 15, (255, 0, 255), 2)
+            # cv.putText(img, str(int(angle)), (x2 + 50, y2 + 50), cv.FONT_HERSHEY_PLAIN, 2, (255, 0, 255), 2)
+        
+        return angle
 
 def main():
     cap = cv.VideoCapture('myTutorial/Pose Estimation/PoseVideos/man_running.mp4')
