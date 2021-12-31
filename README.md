@@ -1,6 +1,6 @@
 # Intro
 
-Learning OpenCV using material from Jason DSouza, FreeCodeCamp!
+Learning OpenCV using material from Jason DSouza, freeCodeCamp & Murtaza Hassan!
 
 ## Important Updates:
 
